@@ -14,6 +14,15 @@ class PostsController < ApplicationController
     render json: Post.select('middle_rating', 'title', 'text').where.not('middle_rating': nil).order('middle_rating desc').limit(params[:number].to_i)
   end 
 
+  def list
+   h = {}
+   list = User.joins(:posts).select('posts.user_ip as user_ip, users.login').all.distinct.pluck(:user_ip, :login)
+   list.each do |k,v|
+      h[k] ? h[k].push(v) : h[k]=[v]
+    end
+    render json: h
+  end  
+
   private
     #check login
     def post_params_filter
