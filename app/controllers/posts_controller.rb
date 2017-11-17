@@ -9,6 +9,11 @@ class PostsController < ApplicationController
     end
   end
 
+  #list of post sorted by middle_rating desc
+  def index
+    render json: Post.select('middle_rating', 'title', 'text').where.not('middle_rating': nil).order('middle_rating desc').limit(params[:number].to_i)
+  end 
+
   private
     #check login
     def post_params_filter
